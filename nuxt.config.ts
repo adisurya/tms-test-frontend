@@ -50,7 +50,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:8000', // Ganti dengan URL backend Laravel
+      apiBase: 'https://tms-test-beige.vercel.app/api', // Ganti dengan URL backend Laravel
     }
   },
 })
