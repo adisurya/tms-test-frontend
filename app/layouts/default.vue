@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRoute } from '#app'; // Nuxt Auto-import
 
@@ -13,6 +13,7 @@ const snackbar = ref(false);
 const message = ref('');
 const totalAssignToMe = ref(0);
 const loading = ref(false);
+const timeoutHandle = ref(null);
 
 const route = useRoute();
 
@@ -34,13 +35,12 @@ const getTotalAssignToMe = async () => {
 
   }
 
-  setTimeout(() => {
+  timeoutHandle.value = setTimeout(() => {
     getTotalAssignToMe();
   }, 30000);
 
 };
 
-getTotalAssignToMe();
 
 const logout = () => {
   loading.value = true;
@@ -63,8 +63,16 @@ const logout = () => {
         snackbar.value = true;
       }
     });
-
 };
+
+onMounted(() => {
+  getTotalAssignToMe();
+});
+
+onUnmounted(() => {
+  clearTimeout(timeoutHandle.value);
+  timeoutHandle.value = 0;
+});
 </script>
 
 <template>
