@@ -1,5 +1,8 @@
 <script setup>
 import {ref, onMounted, computed, defineProps, defineEmits, watch} from 'vue';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 const { $api } = useNuxtApp();
 const emit = defineEmits(['deleted']);
@@ -34,7 +37,11 @@ const deleteTask = async () => {
   const { valid } = await form.value.validate();
   if (valid) {
     loading.value = true;
-    $api.delete(`/api/tasks/${task.value.id}`)
+    $api.delete(`/api/tasks/${task.value.id}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    })
     .then(response => {
         emit('deleted', '');
 

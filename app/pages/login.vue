@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
 const { $api } = useNuxtApp();
 
 definePageMeta({ layout: "no-menu" });
@@ -12,19 +16,19 @@ const loading = ref(false);
 
 const login = () => {
   loading.value = true;
-  $api.get('/sanctum/csrf-cookie').then(response => {
     // Login...
     $api.post('/api/login', { email: email.value, password: password.value }).then(response => {
-
+      console.log(response.data.data.access_token);
+      authStore.setToken(response.data.data.access_token);
       loading.value = false;
       navigateTo('/');
     })
     .catch(error => {
+      console.log(error);
       loading.value = false;
       message.value = 'Login gagal, cek email & password!';
       snackbar.value = true;
     });
-  });
 };
 </script>
 

@@ -1,5 +1,8 @@
 <script setup>
 import {ref, onMounted, computed, defineProps, defineEmits, watch} from 'vue';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 const { $api } = useNuxtApp();
 const emit = defineEmits(['updated']);
@@ -98,6 +101,10 @@ const updateTask = async () => {
       due_date: formattedDueDate.value,
       assign_to: assignTo.value,
       status: status.value,
+    }, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
     })
     .then(response => {
         emit('updated', '');

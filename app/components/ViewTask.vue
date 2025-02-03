@@ -1,5 +1,8 @@
 <script setup>
 import {ref, onMounted, computed, defineProps, watch} from 'vue';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 const { $api } = useNuxtApp();
 
@@ -33,7 +36,11 @@ const getTask = async () => {
 
   loading.value = true;
   try {
-    const response = await $api.get(`/api/tasks/${id}`);
+    const response = await $api.get(`/api/tasks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
     task.value = response.data.task;
     logs.value = response.data.logs || [];
     console.log(task.value);

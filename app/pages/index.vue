@@ -1,5 +1,9 @@
 <script setup>
 import {ref, onMounted, computed} from 'vue';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
 import DeleteTask from '~/components/DeleteTask.vue';
 
 const { $api } = useNuxtApp();
@@ -15,7 +19,12 @@ const loadData = async () => {
   showLoadData.value = true;
 
   try {
-    const response = await $api.get('/api/tasks');
+    console.log('indextoken: ' + authStore.token);
+    const response = await $api.get('/api/tasks', {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+    });
     tasks.value = response.data.data;
   } catch (error) {
     if (error.status === 401) {
@@ -32,7 +41,12 @@ const loadData = async () => {
 const loadUsers = async () => {
   showLoadData.value = true;
   try {
-    const response = await $api.get('/api/users');
+    const response = await $api.get('/api/users', {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`,
+      },
+
+    });
     users.value = response.data;
     console.log(users.value);
   } catch (error) {
