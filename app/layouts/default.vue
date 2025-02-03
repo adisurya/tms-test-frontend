@@ -44,7 +44,7 @@ getTotalAssignToMe();
 
 const logout = () => {
   loading.value = true;
-  $api.post('/api/logout', {
+  $api.post('/api/logout', {}, {
     headers: {
         Authorization: `Bearer ${authStore.token}`,
       },
