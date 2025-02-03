@@ -5,7 +5,6 @@ export default defineNuxtPlugin(() => {
 
   const api = axios.create({
     withCredentials: true, // Izinkan mengirimkan cookies dengan request
-    withXSRFToken: true,
     baseURL: config.public.apiBase, // URL API dari runtimeConfig
 
   });
